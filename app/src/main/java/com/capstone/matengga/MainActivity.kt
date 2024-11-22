@@ -1,12 +1,43 @@
 package com.capstone.matengga
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import com.capstone.matengga.ui.fragment.HistoryFragment
+import com.capstone.matengga.ui.fragment.HomeFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var bottomNavigationView: BottomNavigationView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        setContentView(R.layout.activity_main)
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation)
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, HomeFragment())
+                .commit()
+            bottomNavigationView.selectedItemId = R.id.nav_home
+        }
+
+        bottomNavigationView.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_home -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, HomeFragment())
+                        .commit()
+                    true
+                }
+                R.id.nav_history -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, HistoryFragment())
+                        .commit()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 }

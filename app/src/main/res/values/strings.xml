@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">matengga</string>
+    <string name="app_name">MatengGa</string>
+    <string name="home_nav">Home</string>
+    <string name="history_nav">History</string>
 </resources>
