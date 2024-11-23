@@ -2,6 +2,7 @@ package com.capstone.matengga
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.capstone.matengga.ui.camera.CameraFragment
 import com.capstone.matengga.ui.history.HistoryFragment
 import com.capstone.matengga.ui.home.HomeFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -33,6 +34,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_history -> {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, HistoryFragment())
+                        .commit()
+                    true
+                }
+                R.id.nav_camera -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, CameraFragment())
                         .commit()
                     true
                 }
