@@ -2,8 +2,8 @@ package com.capstone.matengga
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.capstone.matengga.ui.fragment.HistoryFragment
-import com.capstone.matengga.ui.fragment.HomeFragment
+import com.capstone.matengga.ui.history.HistoryFragment
+import com.capstone.matengga.ui.home.HomeFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
