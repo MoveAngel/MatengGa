@@ -1,5 +1,6 @@
 package com.capstone.matengga.ui.history
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -12,6 +13,12 @@ import java.util.Date
 import java.util.Locale
 
 class HistoryAdapter : ListAdapter<HistoryEntity, HistoryAdapter.HistoryViewHolder>(DIFF_CALLBACK) {
+
+    private var onItemClickCallback: ((HistoryEntity) -> Unit)? = null
+
+    fun setOnItemClickCallback(callback: (HistoryEntity) -> Unit) {
+        onItemClickCallback = callback
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
         val binding = ItemHistoryBinding.inflate(
@@ -29,11 +36,20 @@ class HistoryAdapter : ListAdapter<HistoryEntity, HistoryAdapter.HistoryViewHold
     inner class HistoryViewHolder(private val binding: ItemHistoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        init {
+            itemView.setOnClickListener {
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onItemClickCallback?.invoke(getItem(position))
+                }
+            }
+        }
+
         fun bind(history: HistoryEntity) {
             binding.apply {
-                fruitImage.setImageURI(android.net.Uri.parse(history.imageUri))
+                fruitImage.setImageURI(Uri.parse(history.imageUri))
                 fruitName.text = history.fruitName
-                ripeness.text = "${history.ripeness} (${history.ripenessPercentage}%)"
+                ripeness.text = history.ripeness
                 timestamp.text = formatDate(history.timestamp)
             }
         }

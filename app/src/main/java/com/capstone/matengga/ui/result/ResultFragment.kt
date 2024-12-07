@@ -32,19 +32,18 @@ class ResultFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setupViews()
-        loadImage()
+        setupBackButton()
+        handleArguments()
         observeViewModel()
     }
 
-    private fun setupViews() {
+    private fun setupBackButton() {
         binding.backButton.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
     }
 
-    private fun loadImage() {
+    private fun handleArguments() {
         val imageUri = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
             arguments?.getParcelable("image_uri", Uri::class.java)
         } else {
@@ -52,12 +51,23 @@ class ResultFragment : Fragment() {
             arguments?.getParcelable("image_uri")
         }
 
+        val predictionData = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getParcelable("prediction_data", PredictionResponse::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            arguments?.getParcelable("prediction_data")
+        }
+
         imageUri?.let { uri ->
             binding.imageResult.setImageURI(uri)
-            viewModel.predictImage(uri)
+
+            predictionData?.let { data ->
+                showResult(data)  // Langsung tampilkan data jika sudah ada
+            } ?: run {
+                viewModel.predictImage(uri)  // Hit API hanya jika tidak ada data
+            }
         }
     }
-
     private fun observeViewModel() {
         viewModel.predictionState.observe(viewLifecycleOwner) { state ->
             when (state) {
@@ -79,12 +89,25 @@ class ResultFragment : Fragment() {
             ripenessResult.text = response.ripeness
             description.text = response.getDescription()
 
-            // Save to history
-            arguments?.getParcelable<Uri>("image_uri")?.let { uri ->
-                saveToHistory(response, uri)
+            // Cek apakah data berasal dari history
+            val fromHistory = arguments?.getBoolean("from_history") ?: false
+
+            // Hanya simpan ke history jika bukan berasal dari history
+            if (!fromHistory) {
+                val imageUri = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                    arguments?.getParcelable("image_uri", Uri::class.java)
+                } else {
+                    @Suppress("DEPRECATION")
+                    arguments?.getParcelable("image_uri")
+                }
+
+                imageUri?.let { uri ->
+                    saveToHistory(response, uri)
+                }
             }
         }
     }
+
 
     private fun showError(error: String) {
         binding.progressBar.visibility = View.GONE

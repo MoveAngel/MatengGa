@@ -27,7 +27,11 @@ class HistoryViewModel(private val historyDao: HistoryDao) : ViewModel() {
 
     fun clearHistory() {
         viewModelScope.launch {
-            historyDao.clearHistory()
+            try {
+                historyDao.clearHistory()
+            } catch (e: Exception) {
+                // Handle error if needed
+            }
         }
     }
 

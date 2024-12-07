@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class ResultViewModel : ViewModel() {
     private val _predictionState = MutableLiveData<ResultState>()
-    val predictionState: LiveData<ResultState> get() = _predictionState
+    val predictionState: LiveData<ResultState> = _predictionState
 
     fun predictImage(uri: Uri) {
         viewModelScope.launch {
@@ -23,7 +23,7 @@ class ResultViewModel : ViewModel() {
                 _predictionState.value = ResultState.Success(
                     PredictionResponse(
                         fruitName = "apple",
-                        ripeness = "85%",
+                        ripeness = "Matang",
                         ripenessPercentage = 85.0
                     )
                 )

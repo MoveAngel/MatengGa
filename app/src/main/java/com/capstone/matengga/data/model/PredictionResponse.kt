@@ -1,16 +1,19 @@
 // data/model/PredictionResponse.kt
 package com.capstone.matengga.data.model
 
+import android.annotation.SuppressLint
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
+@kotlinx.parcelize.Parcelize
 data class PredictionResponse(
     @SerializedName("Nama Buah")
     val fruitName: String,
-    @SerializedName("Rippenes")   // Sesuaikan dengan response API
-    val ripeness: String,         // Berisi "Ripe" atau nilai lainnya
-    @SerializedName("Persentase Rippenes")  // Sesuaikan dengan response API
+    @SerializedName("Ripeness")
+    val ripeness: String,
+    @SerializedName("Persentase Ripeness")
     val ripenessPercentage: Double
-) {
+) : Parcelable {
     fun getTranslatedFruitName(): String {
         return when(fruitName.lowercase()) {
             "apple" -> "Apel"
@@ -32,6 +35,7 @@ data class PredictionResponse(
         }
     }
 
+    @SuppressLint("DefaultLocale")
     fun getDescription(): String {
         val translatedRipeness = getTranslatedRipeness()
         val percentage = String.format("%.1f", ripenessPercentage)
