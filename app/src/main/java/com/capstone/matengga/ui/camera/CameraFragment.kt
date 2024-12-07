@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.capstone.matengga.R
 import com.capstone.matengga.databinding.FragmentCameraBinding
+import com.capstone.matengga.ui.result.ResultFragment
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -61,7 +62,17 @@ class CameraFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 result.data?.data?.let { uri ->
-                    // Handle selected image
+                    // Navigate to ResultFragment with selected image
+                    val resultFragment = ResultFragment().apply {
+                        arguments = Bundle().apply {
+                            putParcelable("image_uri", uri)
+                        }
+                    }
+
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, resultFragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
             }
         }
@@ -169,14 +180,29 @@ class CameraFragment : Fragment() {
             ContextCompat.getMainExecutor(requireContext()),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    // Navigate to Result Fragment/Activity
-                    val msg = "Photo capture succeeded: ${output.savedUri}"
-                    Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
-                    Log.d(TAG, msg)
+                    output.savedUri?.let { uri ->
+                        // Navigate to ResultFragment
+                        val resultFragment = ResultFragment().apply {
+                            arguments = Bundle().apply {
+                                putParcelable("image_uri", uri)
+                            }
+                        }
+
+                        // Replace current fragment with ResultFragment
+                        parentFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, resultFragment)
+                            .addToBackStack(null)  // Agar bisa kembali dengan tombol back
+                            .commit()
+                    }
                 }
 
                 override fun onError(exc: ImageCaptureException) {
                     Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
+                    Toast.makeText(
+                        requireContext(),
+                        "Gagal mengambil foto",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         )

@@ -12,4 +12,7 @@
     <string name="back_button">Kembali</string>
     <string name="gallery_button">Buka Galeri</string>
     <string name="capture_button">Ambil Foto</string>
+    <string name="description">Deskripsi</string>
+    <string name="hasil">Result</string>
+    <string name="ripenesspercentation">Tingkat Kematangan</string>
 </resources>
