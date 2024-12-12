@@ -9,8 +9,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.exam.matengga.data.local.entity.HistoryEntity
+import com.exam.matengga.data.local.room.MatengGaDatabase
 import com.exam.matengga.data.repository.PredictionRepository
 import com.exam.matengga.databinding.FragmentResultBinding
+import com.exam.matengga.view.history.HistoryAdapter
+import com.exam.matengga.view.history.HistoryViewModel
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.Locale
@@ -42,7 +48,7 @@ class ResultFragment : Fragment() {
             try {
                 val localFile = copyUriToFile(imageUri)
                 binding.imageResult.setImageURI(Uri.fromFile(localFile))
-                observePrediction(localFile)
+                classifyAndObservePrediction(localFile, imageUri)
             } catch (e: FileNotFoundException) {
                 Log.e(TAG, "File not found for URI: $imageUri", e)
                 Toast.makeText(requireContext(), "File not found for the selected image", Toast.LENGTH_SHORT).show()
@@ -53,7 +59,7 @@ class ResultFragment : Fragment() {
         }
     }
 
-    private fun observePrediction(file: File) {
+    private fun classifyAndObservePrediction(file: File, imageUri: Uri) {
         viewModel.classifyFruit(file)
         viewModel.prediction.observe(viewLifecycleOwner) { result ->
             when {
@@ -61,6 +67,15 @@ class ResultFragment : Fragment() {
                     val data = result.getOrNull()
                     binding.fruitTypeResult.text = data?.predictedFruit?.let { translateFruitName(it) } ?: "Tidak diketahui"
                     binding.ripenessResult.text = data?.ripeness?.let { translateRipeness(it) } ?: "-"
+
+                    // Save to history
+                    data?.let {
+                        saveToHistory(
+                            it.predictedFruit ?: "Tidak diketahui",
+                            it.ripeness ?: "-",
+                            imageUri
+                        )
+                    }
                 }
                 result.isFailure -> {
                     Toast.makeText(requireContext(), "Error: ${result.exceptionOrNull()?.message}", Toast.LENGTH_SHORT).show()
@@ -103,6 +118,20 @@ class ResultFragment : Fragment() {
         binding.imageResult.visibility = if (isLoading) View.GONE else View.VISIBLE
     }
 
+    private fun saveToHistory(predictedFruit: String, ripeness: String, imageUri: Uri) {
+        val history = HistoryEntity(
+            fruitName = predictedFruit,
+            ripeness = ripeness,
+            imageUri = imageUri.toString(),
+            timestamp = System.currentTimeMillis()
+        )
+
+        lifecycleScope.launch {
+            val dao = MatengGaDatabase.getDatabase(requireContext()).historyDao()
+            dao.insertHistory(history)
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -112,3 +141,5 @@ class ResultFragment : Fragment() {
         private const val TAG = "ResultFragment"
     }
 }
+
+
