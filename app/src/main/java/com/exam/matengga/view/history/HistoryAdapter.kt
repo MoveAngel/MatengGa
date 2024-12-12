@@ -10,6 +10,7 @@ import com.exam.matengga.data.local.entity.HistoryEntity
 import com.exam.matengga.databinding.ItemHistoryBinding
 import java.text.DateFormat
 import java.util.Date
+import java.util.Locale
 
 class HistoryAdapter(private val onDeleteClick: (HistoryEntity) -> Unit) :
     ListAdapter<HistoryEntity, HistoryAdapter.HistoryViewHolder>(DiffCallback()) {
@@ -32,12 +33,31 @@ class HistoryAdapter(private val onDeleteClick: (HistoryEntity) -> Unit) :
         fun bind(history: HistoryEntity) {
             binding.fruitName.text = history.fruitName
             binding.ripeness.text = history.ripeness
+            binding.fruitName.text = history.fruitName.let { translateFruitName(it) }
+            binding.ripeness.text = history.ripeness.let { translateRipeness(it) }
             binding.timestamp.text = DateFormat.getDateTimeInstance().format(Date(history.timestamp))
             binding.fruitImage.setImageURI(Uri.parse(history.imageUri))
 
             binding.root.setOnLongClickListener {
                 onDeleteClick(history)
                 true
+            }
+        }
+        private fun translateRipeness(ripeness: String): String {
+            return when (ripeness.lowercase(Locale.ROOT)) {
+                "unripe" -> "Belum matang"
+                "ripe" -> "Matang"
+                else -> "Tidak diketahui"
+            }
+        }
+
+        private fun translateFruitName(fruitName: String): String {
+            return when (fruitName.lowercase(Locale.ROOT)) {
+                "durian" -> "Durian"
+                "strawberry" -> "Stroberi"
+                "apple" -> "Apel"
+                "dragon fruit" -> "Buah Naga"
+                else -> fruitName
             }
         }
     }

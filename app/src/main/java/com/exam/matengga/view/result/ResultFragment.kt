@@ -108,7 +108,7 @@ class ResultFragment : Fragment() {
             "durian" -> "Durian"
             "strawberry" -> "Stroberi"
             "apple" -> "Apel"
-            "dragonfruit" -> "Buah Naga"
+            "dragon fruit" -> "Buah Naga"
             else -> fruitName
         }
     }
