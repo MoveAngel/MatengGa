@@ -17,4 +17,6 @@
     <string name="nama_buah">Nama Buah</string>
     <string name="kematangan">Kematangan</string>
     <string name="ini_nama_buah">ini nama buah</string>
+    <string name="hapus_semua_riwayat">Hapus Semua Riwayat</string>
+    <string name="belum_ada_riwayat">Belum ada riwayat</string>
 </resources>

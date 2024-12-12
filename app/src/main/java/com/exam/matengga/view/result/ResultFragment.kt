@@ -48,14 +48,17 @@ class ResultFragment : Fragment() {
             try {
                 val localFile = copyUriToFile(imageUri)
                 binding.imageResult.setImageURI(Uri.fromFile(localFile))
+                showLoading(true)
                 classifyAndObservePrediction(localFile, imageUri)
             } catch (e: FileNotFoundException) {
                 Log.e(TAG, "File not found for URI: $imageUri", e)
                 Toast.makeText(requireContext(), "File not found for the selected image", Toast.LENGTH_SHORT).show()
+                showLoading(false)
             }
         } else {
             Log.e(TAG, "Image URI is null")
             Toast.makeText(requireContext(), "Image not found", Toast.LENGTH_SHORT).show()
+            showLoading(false)
         }
     }
 
@@ -68,7 +71,6 @@ class ResultFragment : Fragment() {
                     binding.fruitTypeResult.text = data?.predictedFruit?.let { translateFruitName(it) } ?: "Tidak diketahui"
                     binding.ripenessResult.text = data?.ripeness?.let { translateRipeness(it) } ?: "-"
 
-                    // Save to history
                     data?.let {
                         saveToHistory(
                             it.predictedFruit ?: "Tidak diketahui",
@@ -114,8 +116,13 @@ class ResultFragment : Fragment() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.loadingOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.kartuResult.visibility = if (isLoading) View.GONE else View.VISIBLE
         binding.imageResult.visibility = if (isLoading) View.GONE else View.VISIBLE
+        binding.fruitNamee.visibility = if (isLoading) View.GONE else View.VISIBLE
+        binding.fruitTypeResult.visibility = if (isLoading) View.GONE else View.VISIBLE
+        binding.resultofripeness.visibility = if (isLoading) View.GONE else View.VISIBLE
+        binding.ripenessResult.visibility = if (isLoading) View.GONE else View.VISIBLE
     }
 
     private fun saveToHistory(predictedFruit: String, ripeness: String, imageUri: Uri) {

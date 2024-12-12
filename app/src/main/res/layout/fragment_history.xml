@@ -21,13 +21,12 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Tambahkan Tombol Delete All -->
     <Button
         android:id="@+id/btnDeleteAll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="Hapus Semua Riwayat"
+        android:text="@string/hapus_semua_riwayat"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -56,12 +55,13 @@
         <ImageView
             android:layout_width="120dp"
             android:layout_height="120dp"
+            android:contentDescription="@string/ini_banner"
             android:src="@drawable/ic_empty_state"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Belum ada riwayat"
+            android:text="@string/belum_ada_riwayat"
             android:textSize="18sp"
             android:layout_marginTop="16dp"/>
 

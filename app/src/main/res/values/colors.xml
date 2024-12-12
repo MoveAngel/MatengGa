@@ -11,4 +11,7 @@
     <color name="green_pastel">#32502E</color>
     <color name="light_cream">#F5F5DC</color>
     <color name="cream_bagus">#E8ECD7</color>
+    <color name="cream_light">#EED3B1</color>
+    <color name="sage">#ABBA7C</color>
+    <color name="semi_transparent">#80000000</color>
 </resources>

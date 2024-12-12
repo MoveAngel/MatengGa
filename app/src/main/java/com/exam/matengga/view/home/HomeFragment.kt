@@ -24,9 +24,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Contoh penggunaan binding untuk TextView dan ImageView
-        binding.IniNama.text = getString(R.string.app_name)
-        binding.imageView.setImageResource(R.drawable.logo) // Ganti dengan resource gambar Anda
+        binding.imageView.setImageResource(R.drawable.logo_wt)
     }
 
     override fun onDestroyView() {
