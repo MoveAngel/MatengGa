@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">MatengGa</string>
+    <string name="home_nav">Home</string>
+    <string name="history_nav">History</string>
+    <string name="image_result">Image Result</string>
+    <string name="result">Result</string>
+    <string name="camera">Camera</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_history_fruits_yet">No History Fruits Yet</string>
+    <string name="ini_banner">Ini Banner</string>
+    <string name="back_button">Kembali</string>
+    <string name="gallery_button">Buka Galeri</string>
+    <string name="capture_button">Ambil Foto</string>
+    <string name="description">Deskripsi</string>
+    <string name="hasil">Result</string>
+    <string name="ripenesspercentation">Tingkat Kematangan</string>
+    <string name="nama_buah">Nama Buah</string>
+    <string name="kematangan">Kematangan</string>
+    <string name="ini_nama_buah">ini nama buah</string>
+</resources>
