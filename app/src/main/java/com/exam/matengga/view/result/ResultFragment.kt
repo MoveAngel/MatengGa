@@ -1,5 +1,6 @@
 package com.exam.matengga.view.result
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -45,6 +46,14 @@ class ResultFragment : Fragment() {
         val imageUri = arguments?.getParcelable<Uri>("image_uri")
         if (imageUri != null) {
             Log.d(TAG, "Received Image URI: $imageUri")
+            try {
+                requireContext().contentResolver.takePersistableUriPermission(
+                    imageUri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                )
+            } catch (e: SecurityException) {
+                Log.e(TAG, "Failed to persist URI permission", e)
+            }
             try {
                 val localFile = copyUriToFile(imageUri)
                 binding.imageResult.setImageURI(Uri.fromFile(localFile))

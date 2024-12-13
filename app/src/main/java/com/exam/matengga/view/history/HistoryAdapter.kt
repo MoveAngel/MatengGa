@@ -1,11 +1,14 @@
 package com.exam.matengga.view.history
 
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.exam.matengga.R
 import com.exam.matengga.data.local.entity.HistoryEntity
 import com.exam.matengga.databinding.ItemHistoryBinding
 import java.text.DateFormat
@@ -36,13 +39,24 @@ class HistoryAdapter(private val onDeleteClick: (HistoryEntity) -> Unit) :
             binding.fruitName.text = history.fruitName.let { translateFruitName(it) }
             binding.ripeness.text = history.ripeness.let { translateRipeness(it) }
             binding.timestamp.text = DateFormat.getDateTimeInstance().format(Date(history.timestamp))
-            binding.fruitImage.setImageURI(Uri.parse(history.imageUri))
+
+            try {
+                Glide.with(binding.root.context)
+                    .load(Uri.parse(history.imageUri))
+                    .placeholder(R.drawable.ic_pc_image)
+                    .error(R.drawable.ic_broken_image)
+                    .into(binding.fruitImage)
+            } catch (e: SecurityException) {
+                Log.e("HistoryAdapter", "Failed to load image: ${history.imageUri}", e)
+                binding.fruitImage.setImageResource(R.drawable.ic_broken_image)
+            }
 
             binding.root.setOnLongClickListener {
                 onDeleteClick(history)
                 true
             }
         }
+
         private fun translateRipeness(ripeness: String): String {
             return when (ripeness.lowercase(Locale.ROOT)) {
                 "unripe" -> "Belum matang"
