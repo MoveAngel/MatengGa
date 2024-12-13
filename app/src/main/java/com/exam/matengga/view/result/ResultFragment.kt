@@ -109,7 +109,7 @@ class ResultFragment : Fragment() {
         return when (fruitName.lowercase(Locale.ROOT)) {
             "durian" -> "Durian"
             "strawberry" -> "Stroberi"
-            "apple" -> "Apel"
+            "grape" -> "Anggur"
             "dragon fruit" -> "Buah Naga"
             else -> fruitName
         }

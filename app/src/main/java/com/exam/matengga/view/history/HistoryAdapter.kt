@@ -55,7 +55,7 @@ class HistoryAdapter(private val onDeleteClick: (HistoryEntity) -> Unit) :
             return when (fruitName.lowercase(Locale.ROOT)) {
                 "durian" -> "Durian"
                 "strawberry" -> "Stroberi"
-                "apple" -> "Apel"
+                "grape" -> "Anggur"
                 "dragon fruit" -> "Buah Naga"
                 else -> fruitName
             }
